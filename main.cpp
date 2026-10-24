@@ -24,9 +24,9 @@ struct Person{
 Person CreateRandomPerson(){
     Person p;
     p.type = (PersonType)GetRandomValue(0,3);
-    p.hasMud = GetRandomValue(0,1);
-    p.hasWeapon = GetRandomValue(0,1);
-    p.paid = GetRandomValue(0,1);
+    p.hasMud = (GetRandomValue(0,2) == 0 );
+    p.hasWeapon = (GetRandomValue(0,2) == 0 );
+    p.paid = (GetRandomValue(0,2) !=0 );
 
     p.isRuleBroken = (p.hasMud||p.hasWeapon||!p.paid);
     p.x = 450.0f ;
