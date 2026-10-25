@@ -212,7 +212,7 @@ int main(){
         DrawTextureEx(deskTex, { 1000.0f, 760.0f }, 0.0f, 0.1f, WHITE);
 
         Texture2D currentGuy = (state == Angry) ? guyCryTex : guyIdleTex;
-        DrawTextureEx(currentGuy, { 1230.0f, 732.0f }, 0.0f, 0.12f, WHITE);
+        DrawTextureEx(currentGuy, { 1230.0f, 610.0f }, 0.0f, 0.22, WHITE);
 
         DrawText("RULES:\n1. No Mud\n2. No Sword\n3. Must Pay Coin", 1045, 845, 26, BLACK);
 
