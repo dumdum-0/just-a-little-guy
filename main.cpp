@@ -2,6 +2,43 @@
 #include <cmath>
 #include <string>
 
+const unsigned char knight_png[]   = {
+#embed "knight.png"
+};
+const unsigned char noble_png[]    = {
+#embed "noble.png"
+};
+const unsigned char monster_png[]  = {
+#embed "monster.png"
+};
+const unsigned char ogre_png[]     = {
+#embed "ogre.png"
+};
+const unsigned char mud_png[]      = {
+#embed "mud.png"
+};
+const unsigned char sword_png[]    = {
+#embed "sword.png"
+};
+const unsigned char coin_png[]     = {
+#embed "coin.png"
+};
+const unsigned char guy_idle_png[] = {
+#embed "guy_idle.png"
+};
+const unsigned char guy_cry_png[]  = {
+#embed "guy_cry.png"
+};
+const unsigned char table_png[]    = {
+#embed "table.png"
+};
+
+Texture2D LoadEmbeddedPNG(const unsigned char* data, int dataSize) {
+    Image img = LoadImageFromMemory(".png", data, dataSize);
+    Texture2D tex = LoadTextureFromImage(img);
+    UnloadImage(img);
+    return tex;
+}
 
 enum GameState {
     Inspect,
@@ -43,18 +80,18 @@ int main(){
     SetTargetFPS(60);
 
     Texture2D bootTex[4] = {
-        LoadTexture("knight.png"),
-        LoadTexture("noble.png"),
-        LoadTexture("monster.png"),
-        LoadTexture("ogre.png")
+        LoadEmbeddedPNG(knight_png,  sizeof(knight_png)),
+        LoadEmbeddedPNG(noble_png,   sizeof(noble_png)),
+        LoadEmbeddedPNG(monster_png, sizeof(monster_png)),
+        LoadEmbeddedPNG(ogre_png,    sizeof(ogre_png))
     };
 
-    Texture2D mudTex = LoadTexture("mud.png");
-    Texture2D swordTex = LoadTexture("sword.png");
-    Texture2D coinTex = LoadTexture("coin.png");
-    Texture2D guyIdleTex = LoadTexture("guy_idle.png");
-    Texture2D guyCryTex = LoadTexture("guy_cry.png");
-    Texture2D deskTex = LoadTexture("table.png");
+    Texture2D mudTex     = LoadEmbeddedPNG(mud_png,      sizeof(mud_png));
+    Texture2D swordTex   = LoadEmbeddedPNG(sword_png,    sizeof(sword_png));
+    Texture2D coinTex    = LoadEmbeddedPNG(coin_png,     sizeof(coin_png));
+    Texture2D guyIdleTex = LoadEmbeddedPNG(guy_idle_png, sizeof(guy_idle_png));
+    Texture2D guyCryTex  = LoadEmbeddedPNG(guy_cry_png,  sizeof(guy_cry_png));
+    Texture2D deskTex    = LoadEmbeddedPNG(table_png,    sizeof(table_png));
 
     for (int i = 0; i < 4; i++) SetTextureFilter(bootTex[i], TEXTURE_FILTER_BILINEAR);
     SetTextureFilter(mudTex, TEXTURE_FILTER_BILINEAR);
