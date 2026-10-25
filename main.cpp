@@ -24,9 +24,9 @@ struct Person{
 Person CreateRandomPerson(){
     Person p;
     p.type = (PersonType)GetRandomValue(0,3);
-    p.hasMud = (GetRandomValue(0,2) == 0 );
-    p.hasWeapon = (GetRandomValue(0,2) == 0 );
-    p.paid = (GetRandomValue(0,2) !=0 );
+    p.hasMud = (GetRandomValue(0,3) == 0 );
+    p.hasWeapon = (GetRandomValue(0,3) == 0 );
+    p.paid = true;
 
     p.isRuleBroken = (p.hasMud||p.hasWeapon||!p.paid);
     p.x = 450.0f ;
@@ -42,12 +42,34 @@ int main(){
     ToggleFullscreen();
     SetTargetFPS(60);
 
+    Texture2D bootTex[4] = {
+        LoadTexture("knight.png"),
+        LoadTexture("noble.png"),
+        LoadTexture("monster.png"),
+        LoadTexture("ogre.png")
+    };
+
+    Texture2D mudTex = LoadTexture("mud.png");
+    Texture2D swordTex = LoadTexture("sword.png");
+    Texture2D coinTex = LoadTexture("coin.png");
+    Texture2D guyIdleTex = LoadTexture("guy_idle.png");
+    Texture2D guyCryTex = LoadTexture("guy_cry.png");
+    Texture2D deskTex = LoadTexture("table.png");
+
+    for (int i = 0; i < 4; i++) SetTextureFilter(bootTex[i], TEXTURE_FILTER_BILINEAR);
+    SetTextureFilter(mudTex, TEXTURE_FILTER_BILINEAR);
+    SetTextureFilter(swordTex, TEXTURE_FILTER_BILINEAR);
+    SetTextureFilter(coinTex, TEXTURE_FILTER_BILINEAR);
+    SetTextureFilter(guyIdleTex, TEXTURE_FILTER_BILINEAR);
+    SetTextureFilter(guyCryTex, TEXTURE_FILTER_BILINEAR);
+    SetTextureFilter(deskTex, TEXTURE_FILTER_BILINEAR);
+
     GameState state  = Inspect ;
     Person curPerson = CreateRandomPerson();
 
     int score = 0;
     int strikes = 0;
-    int puppyEyesLeft = 3;
+    int puppyEyesLeft = 5;
     const char* message = "press [1] to let in , [2] to reject";
 
     Color bootColors[4] = {LIGHTGRAY , GOLD , MAROON, DARKGREEN};
@@ -91,7 +113,7 @@ int main(){
                     }
                 }
 
-                if (strikes >= 3)
+                if (strikes >= 5)
                 {
                     state = Game_Over;
                 }
@@ -127,7 +149,7 @@ int main(){
                     strikes++;
                     message = "You caved in so you wouldn't get squished (+1 strikes)";
                     curPerson = CreateRandomPerson();
-                    if (strikes >=3)
+                    if (strikes >=5)
                     {
                         state = Game_Over;
                     }
@@ -144,7 +166,7 @@ int main(){
                 {
                     score = 0;
                     strikes = 0;
-                    puppyEyesLeft = 3;
+                    puppyEyesLeft = 5;
                     curPerson = CreateRandomPerson();
                     state = Inspect;
                     message = "New Shift Started!! , [1] to let in , [2] to reject.";
@@ -156,42 +178,57 @@ int main(){
         BeginDrawing();
         ClearBackground(DARKBROWN);
 
-        DrawRectangle(0,800,1920,280,BROWN);
-        DrawRectangle(curPerson.x , curPerson.y, 300,550, bootColors[curPerson.type]);
-        DrawText(bootNames[curPerson.type],curPerson.x+30 ,curPerson.y+40, 40, BLACK);
-        
+        DrawRectangle(0,800,1920,400,BROWN);
+
+
+        //DrawRectangle(curPerson.x , curPerson.y, 300,550, bootColors[curPerson.type]);
+        //DrawText(bootNames[curPerson.type],curPerson.x+30 ,curPerson.y+40, 40, BLACK);
+        float bootDrawY = curPerson.y +15.0f ;
+        DrawTextureEx(bootTex[curPerson.type], { curPerson.x, bootDrawY }, 0.0f, 0.1f, WHITE);
+        DrawText(bootNames[curPerson.type], curPerson.x + 80, bootDrawY - 45, 40, WHITE);
+
         if (curPerson.hasMud)
         {
-            DrawCircle(curPerson.x+80,curPerson.y +500, 45, DARKGRAY);
-            DrawText("MUD", curPerson.x+55, curPerson.y +490, 25, WHITE);
+            //DrawCircle(curPerson.x+80,curPerson.y +500, 45, DARKGRAY);
+            DrawTextureEx(mudTex, { curPerson.x + 85, bootDrawY + 475 }, 0.0f, 0.1f, WHITE);
+            //DrawText("MUD", curPerson.x+55, curPerson.y +490, 25, WHITE);
         }
         if (curPerson.hasWeapon)
         {
-            DrawRectangle(curPerson.x-100,curPerson.y +300 , 80,250, RED);
-            DrawText("SWORD",curPerson.x -95, curPerson.y +400 , 20 ,WHITE);
+            //DrawRectangle(curPerson.x-100,curPerson.y +300 , 80,250, RED);
+            //DrawText("SWORD",curPerson.x -95, curPerson.y +400 , 20 ,WHITE);
+            DrawTextureEx(swordTex, { curPerson.x - 120, bootDrawY+30 }, 0.0f, 0.22f, WHITE);
+
         }
 
 
-        Color mycol = (state == Angry) ? SKYBLUE : GREEN;
+        //Color mycol = (state == Angry) ? SKYBLUE : GREEN;
 
-        DrawRectangle(1150 , 680 , 100,120, mycol);
-        DrawText("LIL GUY",1155,720,20,BLACK);
+        //DrawRectangle(1150 , 680 , 100,120, mycol);
+        //DrawText("LIL GUY",1155,720,20,BLACK);
 
-        DrawRectangle(1000,760,450,220,BEIGE);
-        DrawText("RULES:\n1. No Mud\n2.No Sword\n3. Must Pay Coin",1030,780,30,BLACK);
+        //DrawRectangle(1000,760,450,220,BEIGE);
+        //DrawText("RULES:\n1. No Mud\n2.No Sword\n3. Must Pay Coin",1030,780,30,BLACK);
+        DrawTextureEx(deskTex, { 1000.0f, 760.0f }, 0.0f, 0.1f, WHITE);
+
+        Texture2D currentGuy = (state == Angry) ? guyCryTex : guyIdleTex;
+        DrawTextureEx(currentGuy, { 1230.0f, 732.0f }, 0.0f, 0.12f, WHITE);
+
+        DrawText("RULES:\n1. No Mud\n2. No Sword\n3. Must Pay Coin", 1045, 845, 26, BLACK);
 
         if (curPerson.paid)
         {
-            DrawCircle(1350,760,40,GOLD);
-            DrawText("PAID",1325 , 750 , 20 ,BLACK);
+            //DrawCircle(1350,760,40,GOLD);
+            DrawTextureEx(coinTex, { 1335.0f, 795.0f }, 0.0f, 0.1f, WHITE);
+            //DrawText("PAID",1325 , 750 , 20 ,BLACK);
         }
 
 
         DrawText(TextFormat("Score: %d / 10", score), 50, 40, 40, WHITE);
-        DrawText(TextFormat("Strikes: %d / 3", strikes), 450, 40, 40, RED);
+        DrawText(TextFormat("Strikes: %d / 5", strikes), 450, 40, 40, RED);
         DrawText(TextFormat("Puppy Eyes Left: %d", puppyEyesLeft), 850, 40, 40, PINK);
 
-        DrawRectangle(0, 980, 1920, 100, BLACK);
+        DrawRectangle(0, 980, 1920, 220, BLACK);
         DrawText(message, 50, 1015, 32, YELLOW);
 
 
@@ -214,6 +251,14 @@ int main(){
 
 
     }
+
+    for (int i = 0; i < 4; i++) UnloadTexture(bootTex[i]);
+    UnloadTexture(mudTex);
+    UnloadTexture(swordTex);
+    UnloadTexture(coinTex);
+    UnloadTexture(guyIdleTex);
+    UnloadTexture(guyCryTex);
+    UnloadTexture(deskTex);
 
     CloseWindow();
     
